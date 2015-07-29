@@ -19,12 +19,7 @@ trait NestedSetsQueryTrait
     {
         /** @var \yii\db\ActiveQuery $this */
         $class = $this->modelClass;
-        if (isset($class::$nestedSetsLeftAttribute)) {
-            return $this->andWhere([$class::$nestedSetsLeftAttribute => 1]);
-        } else {
-            /** @var \yii\db\ActiveRecord|NestedSetsBehavior $model */
-            $model = new $class;
-            return $this->andWhere([$model->leftAttribute => 1]);
-        }
+        $model = new $class;
+        return $this->andWhere([$model->leftAttribute => 1]);
     }
 }
