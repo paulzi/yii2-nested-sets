@@ -61,6 +61,11 @@ class NestedSetsBehavior extends Behavior
      */
     protected $node;
 
+    /**
+     * @var string
+     */
+    protected $treeChange;
+
 
     /**
      * @inheritdoc
@@ -395,8 +400,9 @@ class NestedSetsBehavior extends Behavior
                 if ($this->treeAttribute === null) {
                     throw new Exception('Can not move a node as the root when "treeAttribute" is not set.');
                 }
-                if ($this->isRoot()) {
-                    throw new Exception('Can not move the root node as the root.');
+                if ($this->owner->getOldAttribute($this->treeAttribute) !== $this->owner->getAttribute($this->treeAttribute)) {
+                    $this->treeChange = $this->owner->getAttribute($this->treeAttribute);
+                    $this->owner->setAttribute($this->treeAttribute, $this->owner->getOldAttribute($this->treeAttribute));
                 }
                 break;
 
@@ -448,8 +454,9 @@ class NestedSetsBehavior extends Behavior
                 $this->moveNode($this->node->getAttribute($this->rightAttribute) + 1, 0);
                 break;
         }
-        $this->operation = null;
-        $this->node      = null;
+        $this->operation  = null;
+        $this->node       = null;
+        $this->treeChange = null;
     }
 
     /**
@@ -589,10 +596,7 @@ class NestedSetsBehavior extends Behavior
         $left   = $this->owner->getAttribute($this->leftAttribute);
         $right  = $this->owner->getAttribute($this->rightAttribute);
         $depth  = $this->owner->getAttribute($this->depthAttribute);
-        $tree   = $this->owner->getPrimaryKey();
-        if ($this->owner->getOldAttribute($this->treeAttribute) !== $this->owner->getAttribute($this->treeAttribute)) {
-            $tree = $this->owner->getAttribute($this->treeAttribute);
-        }
+        $tree   = $this->treeChange ? $this->treeChange : $this->owner->getPrimaryKey();
 
         $this->owner->updateAll(
             [
