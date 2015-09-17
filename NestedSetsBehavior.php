@@ -555,8 +555,8 @@ class NestedSetsBehavior extends Behavior
                 $this->shift($to, $left - 1, $delta);
                 $delta = $to - $left;
             } else {
-                $this->shift($right + 1, $to, -$delta);
-                $delta = $to - $right;
+                $this->shift($right + 1, $to - 1, -$delta);
+                $delta = $to - $right - 1;
             }
             $this->owner->updateAll(
                 [
