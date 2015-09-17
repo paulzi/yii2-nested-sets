@@ -617,7 +617,7 @@ class NestedSetsBehavior extends Behavior
     protected function shift($from, $to, $delta, $tree = null)
     {
         if ($delta !== 0 && ($to === null || $to >= $from)) {
-            if ($tree === null) {
+            if ($this->treeAttribute !== null && $tree === null) {
                 $tree = $this->owner->getAttribute($this->treeAttribute);
             }
             foreach ([$this->leftAttribute, $this->rightAttribute] as $i => $attribute) {
@@ -626,7 +626,7 @@ class NestedSetsBehavior extends Behavior
                     [
                         'and',
                         $to === null ? ['>=', $attribute, $from] : ['between', $attribute, $from, $to],
-                        [$this->treeAttribute => $tree],
+                        $this->treeAttribute !== null ? [$this->treeAttribute => $tree] : [],
                     ]
                 );
             }
