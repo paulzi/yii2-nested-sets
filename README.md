@@ -23,12 +23,56 @@ or add
 
 to the `require` section of your `composer.json` file.
 
-## Migrations
+## Migrations example
 
-Sample migrations are in the folder `sample-migrations`:
+Single tree migration:
 
-- `m150722_150000_single_tree.php` - for single tree tables;
-- `m150722_150100_multiple_tree.php` - for multiple tree tables.
+```php
+class m150722_150000_single_tree extends Migration
+{
+    public function up()
+    {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+        $this->createTable('{{%single_tree}}', [
+            'id'    => Schema::TYPE_PK,
+            'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
+            'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
+            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+        ], $tableOptions);
+        $this->createIndex('lft', '{{%single_tree}}', ['lft', 'rgt']);
+        $this->createIndex('rgt', '{{%single_tree}}', ['rgt']);
+    }
+}
+```
+
+Multiple tree migration:
+
+```php
+class m150722_150100_multiple_tree extends Migration
+{
+    public function up()
+    {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+        $this->createTable('{{%multiple_tree}}', [
+            'id'    => Schema::TYPE_PK,
+            'tree'  => Schema::TYPE_INTEGER . ' NULL',
+            'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
+            'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
+            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+        ], $tableOptions);
+        $this->createIndex('lft', '{{%multiple_tree}}', ['tree', 'lft', 'rgt']);
+        $this->createIndex('rgt', '{{%multiple_tree}}', ['tree', 'rgt']);
+    }
+}
+```
 
 ## Configuring
 
@@ -134,6 +178,14 @@ $descendants = $node11->descendants; // via relation
 $descendants = $node11->getDescendants()->all(); // via query
 $descendants = $node11->getDescendants(2, true)->all(); // get 2 levels of descendants and self node
 $descendants = $node11->getDescendants(3, false, true)->all(); // get 3 levels of descendants in back order
+```
+
+To populate `children` relations for self and descendants of a node:
+
+```php
+$node11 = Sample::findOne(['name' => 'node 1.1']);
+$tree = $node11->populateTree(); // populate all levels
+$tree = $node11->populateTree(2); // populate 2 levels of descendants
 ```
 
 To get the children of a node:

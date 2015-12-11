@@ -213,6 +213,53 @@ class NestedSetsBehavior extends Behavior
     }
 
     /**
+     * Populate children relations for self and all descendants
+     * @param int $depth = null
+     * @return static
+     */
+    public function populateTree($depth = null)
+    {
+        /** @var ActiveRecord[]|static[] $nodes */
+        if ($depth === null) {
+            $nodes = $this->owner->descendants;
+        } else {
+            $nodes = $this->getDescendants($depth)->all();
+        }
+
+        $relates = [];
+        $parents = [$this->owner->getAttribute($this->leftAttribute)];
+        $prev = $this->owner->getAttribute($this->depthAttribute);
+        foreach($nodes as $node)
+        {
+            $depth = $node->getAttribute($this->depthAttribute);
+            if ($depth <= $prev) {
+                $parents = array_slice($parents, 0, $depth - $prev - 1);
+            }
+
+            $key = end($parents);
+            if (!isset($relates[$key])) {
+                $relates[$key] = [];
+            }
+            $relates[$key][] = $node;
+
+            $parents[] = $node->getAttribute($this->leftAttribute);
+            $prev = $depth;
+        }
+
+        $nodes[$this->owner->getAttribute($this->leftAttribute)] = $this->owner;
+        foreach ($nodes as $node) {
+            $key = $node->getAttribute($this->leftAttribute);
+            if (isset($relates[$key])) {
+                $node->populateRelation('children', $relates[$key]);
+            } elseif ($depth === null) {
+                $node->populateRelation('children', []);
+            }
+        }
+
+        return $this->owner;
+    }
+
+    /**
      * @return bool
      */
     public function isRoot()
