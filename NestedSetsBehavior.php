@@ -246,7 +246,7 @@ class NestedSetsBehavior extends Behavior
             $prev = $depth;
         }
 
-        $nodes[$this->owner->getAttribute($this->leftAttribute)] = $this->owner;
+        $nodes[] = $this->owner;
         foreach ($nodes as $node) {
             $key = $node->getAttribute($this->leftAttribute);
             if (isset($relates[$key])) {
