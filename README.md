@@ -42,6 +42,7 @@ class m150722_150000_single_tree extends Migration
             'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'name'  => Schema::TYPE_STRING . ' NOT NULL', // example field
         ], $tableOptions);
         $this->createIndex('lft', '{{%single_tree}}', ['lft', 'rgt']);
         $this->createIndex('rgt', '{{%single_tree}}', ['rgt']);
@@ -67,6 +68,7 @@ class m150722_150100_multiple_tree extends Migration
             'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'name'  => Schema::TYPE_STRING . ' NOT NULL', // example field
         ], $tableOptions);
         $this->createIndex('lft', '{{%multiple_tree}}', ['tree', 'lft', 'rgt']);
         $this->createIndex('rgt', '{{%multiple_tree}}', ['tree', 'rgt']);
