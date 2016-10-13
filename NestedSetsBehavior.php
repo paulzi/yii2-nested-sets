@@ -228,14 +228,13 @@ class NestedSetsBehavior extends Behavior
 
         $key = $this->owner->getAttribute($this->leftAttribute);
         $relates = [];
-        $relates[$key] = [];
         $parents = [$key];
         $prev = $this->owner->getAttribute($this->depthAttribute);
         foreach($nodes as $node)
         {
-            $depth = $node->getAttribute($this->depthAttribute);
-            if ($depth <= $prev) {
-                $parents = array_slice($parents, 0, $depth - $prev - 1);
+            $level = $node->getAttribute($this->depthAttribute);
+            if ($level <= $prev) {
+                $parents = array_slice($parents, 0, $level - $prev - 1);
             }
 
             $key = end($parents);
@@ -245,14 +244,17 @@ class NestedSetsBehavior extends Behavior
             $relates[$key][] = $node;
 
             $parents[] = $node->getAttribute($this->leftAttribute);
-            $prev = $depth;
+            $prev = $level;
         }
 
+        $ownerDepth = $this->owner->getAttribute($this->depthAttribute);
         $nodes[] = $this->owner;
         foreach ($nodes as $node) {
             $key = $node->getAttribute($this->leftAttribute);
             if (isset($relates[$key])) {
                 $node->populateRelation('children', $relates[$key]);
+            } elseif ($depth === null || $ownerDepth + $depth > $node->getAttribute($this->depthAttribute)) {
+                $node->populateRelation('children', []);
             }
         }
 

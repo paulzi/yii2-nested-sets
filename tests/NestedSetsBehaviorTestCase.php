@@ -136,6 +136,14 @@ class NestedSetsBehaviorTestCase extends BaseTestCase
         $node = Node::findOne(19);
         $node->populateTree(1);
         $this->assertEquals(true, $node->isRelationPopulated('children'));
+
+        $node = Node::findOne(1);
+        $node->populateTree(1);
+        $this->assertEquals(false, $node->children[1]->isRelationPopulated('children'));
+
+        $node = Node::findOne(1);
+        $node->populateTree(2);
+        $this->assertEquals(true, $node->children[1]->isRelationPopulated('children'));
     }
 
     public function testIsRoot()
