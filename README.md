@@ -25,6 +25,8 @@ to the `require` section of your `composer.json` file.
 
 ## Migrations example
 
+Warning! `depth` attribute can not be unsigned!
+
 Single tree migration:
 
 ```php
