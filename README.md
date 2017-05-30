@@ -25,7 +25,7 @@ to the `require` section of your `composer.json` file.
 
 ## Migrations example
 
-Warning! `depth` attribute can not be unsigned!
+**Warning! `depth` attribute can not be unsigned!**
 
 Single tree migration:
 
@@ -43,7 +43,7 @@ class m150722_150000_single_tree extends Migration
             'id'    => Schema::TYPE_PK,
             'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
-            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'depth' => Schema::TYPE_INTEGER . ' NOT NULL', // not unsigned!
             'name'  => Schema::TYPE_STRING . ' NOT NULL', // example field
         ], $tableOptions);
         $this->createIndex('lft', '{{%single_tree}}', ['lft', 'rgt']);
@@ -69,7 +69,7 @@ class m150722_150100_multiple_tree extends Migration
             'tree'  => Schema::TYPE_INTEGER . ' NULL',
             'lft'   => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt'   => Schema::TYPE_INTEGER . ' NOT NULL',
-            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'depth' => Schema::TYPE_INTEGER . ' NOT NULL', // not unsigned!
             'name'  => Schema::TYPE_STRING . ' NOT NULL', // example field
         ], $tableOptions);
         $this->createIndex('lft', '{{%multiple_tree}}', ['tree', 'lft', 'rgt']);
