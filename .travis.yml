@@ -11,7 +11,6 @@ sudo: false
 
 install:
   - composer self-update
-  - composer global require fxp/composer-asset-plugin:~1.0
   - composer update --prefer-dist --no-interaction
 
 before_script:
@@ -20,7 +19,7 @@ before_script:
   - mysql -e 'create database test;'
   - psql -U postgres -c 'CREATE DATABASE test;';
   - |
-      if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
+      if [ $TRAVIS_PHP_VERSION = '7.0' ]; then
         PHPUNIT_FLAGS="--coverage-clover=coverage.clover"
       fi
 
@@ -29,7 +28,7 @@ script:
 
 after_script:
   - |
-    if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
+    if [ $TRAVIS_PHP_VERSION = '7.0' ]; then
       wget https://scrutinizer-ci.com/ocular.phar
       php ocular.phar code-coverage:upload --format=php-clover coverage.clover
     fi
