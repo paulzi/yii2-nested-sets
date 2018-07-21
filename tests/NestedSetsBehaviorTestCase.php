@@ -233,6 +233,16 @@ class NestedSetsBehaviorTestCase extends BaseTestCase
         $node->makeRoot()->save();
     }
 
+    public function testMakeRootNoChange()
+    {
+        $node = MultipleTreeNode::findOne(1);
+        $node->slug = 'root';
+        $this->assertTrue($node->makeRoot()->save());
+        $dataSet = $this->getConnection()->createDataSet(['tree', 'multiple_tree']);
+        $expectedDataSet = new ArrayDataSet(require(__DIR__ . '/data/test-make-root-no-change.php'));
+        $this->assertDataSetsEqual($expectedDataSet, $dataSet);
+    }
+
     public function testPrependToInsertInNoEmpty()
     {
         $node = new Node(['slug' => 'new']);

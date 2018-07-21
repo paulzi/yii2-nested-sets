@@ -492,7 +492,9 @@ class NestedSetsBehavior extends Behavior
     {
         switch ($this->operation) {
             case self::OPERATION_MAKE_ROOT:
-                $this->moveNodeAsRoot();
+                if ($this->treeChange || !$this->isRoot() || $this->owner->getIsNewRecord()) {
+                    $this->moveNodeAsRoot();
+                }
                 break;
 
             case self::OPERATION_PREPEND_TO:
