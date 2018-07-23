@@ -89,21 +89,7 @@ use paulzi\nestedsets\NestedSetsBehavior;
  * @property integer $rgt
  * @property integer $depth
  *
- * @method getParents($depth = null)
- * @method getParent()
- * @method getRoot()
- * @method getDescendants($depth = null, $andSelf = false, $backOrder = false)
- * @method getChildren()
- * @method getLeaves($depth = null)
- * @method getPrev()
- * @method getNext()
- * @method populateTree($depth = null)
- * @method isRoot()
- * @method isLeaf()
- * @method makeRoot()
- * @method prependTo($node)
- * @method appendTo($node)
- * @method deleteWithChildren()
+ * @minix NestedSetsBehavior
  */
 
 class Sample extends \yii\db\ActiveRecord
@@ -111,7 +97,7 @@ class Sample extends \yii\db\ActiveRecord
     public function behaviors() {
         return [
             [
-                'class' => NestedSetsBehavior::className(),
+                'class' => NestedSetsBehavior::class,
                 // 'treeAttribute' => 'tree',
             ],
         ];
