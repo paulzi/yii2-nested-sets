@@ -83,12 +83,21 @@ class m150722_150100_multiple_tree extends Migration
 ```php
 use paulzi\nestedsets\NestedSetsBehavior;
 
+/**
+ * @property integer $id
+ * @property integer $lft
+ * @property integer $rgt
+ * @property integer $depth
+ *
+ * @mixin NestedSetsBehavior
+ */
+
 class Sample extends \yii\db\ActiveRecord
 {
     public function behaviors() {
         return [
             [
-                'class' => NestedSetsBehavior::className(),
+                'class' => NestedSetsBehavior::class,
                 // 'treeAttribute' => 'tree',
             ],
         ];
