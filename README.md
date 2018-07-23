@@ -89,7 +89,7 @@ use paulzi\nestedsets\NestedSetsBehavior;
  * @property integer $rgt
  * @property integer $depth
  *
- * @minix NestedSetsBehavior
+ * @mixin NestedSetsBehavior
  */
 
 class Sample extends \yii\db\ActiveRecord
