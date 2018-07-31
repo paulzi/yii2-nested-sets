@@ -215,16 +215,17 @@ class NestedSetsBehavior extends Behavior
     /**
      * Populate children relations for self and all descendants
      * @param int $depth = null
+     * @param string|array $with = null
      * @return static
      */
-    public function populateTree($depth = null)
+    public function populateTree($depth = null, $with = null)
     {
         /** @var ActiveRecord[]|static[] $nodes */
-        if ($depth === null) {
-            $nodes = $this->owner->descendants;
-        } else {
-            $nodes = $this->getDescendants($depth)->all();
+        $query = $this->getDescendants($depth);
+        if ($with) {
+            $query->with($with);
         }
+        $nodes = $query->all();
 
         $key = $this->owner->getAttribute($this->leftAttribute);
         $relates = [];
